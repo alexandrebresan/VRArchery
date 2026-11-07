@@ -1,0 +1,38 @@
+
+# Unity generated files
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Bb]ackups/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# IDE files
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.slnx
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Unity caches
+*.tmp
+*.bak
+*.log

@@ -1,0 +1,5 @@
+{
+  "name": "VRArchery.Stage2.Editor",
+  "includePlatforms": ["Editor"],
+  "references": ["VRArchery.Runtime", "Unity.XR.Interaction.Toolkit", "Unity.XR.CoreUtils", "Unity.TextMeshPro", "UnityEngine.UI", "UnityEditor.TestRunner", "UnityEngine.TestRunner"]
+}

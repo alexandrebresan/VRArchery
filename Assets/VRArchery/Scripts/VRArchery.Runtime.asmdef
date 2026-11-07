@@ -1,0 +1,5 @@
+{
+  "name": "VRArchery.Runtime",
+  "rootNamespace": "VRArchery",
+  "references": ["Unity.XR.Interaction.Toolkit", "Unity.TextMeshPro", "UnityEngine.UI"]
+}
