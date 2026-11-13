@@ -115,6 +115,7 @@ namespace VRArchery.Bow
                 return;
             }
             pullingHand = args.interactorObject;
+            // A projeção inicial evita um salto da corda ao selecionar com a mão ligeiramente fora do centro.
             startingProjection = Vector3.Dot(pullingHand.transform.position - m_RestPoint.position, PullAxis);
             LastDrawResult = BowDrawResult.None;
             LastReleaseIntensity = 0f;
@@ -133,6 +134,7 @@ namespace VRArchery.Bow
             bool completed = DrawDistance > m_MinimumDrawDistance;
             LastReleaseIntensity = NormalizedDraw;
             LastReleaseDistance = DrawDistance;
+            // A flecha usa a pose da soltura, capturada antes de a corda voltar ao repouso.
             LastReleasePosition = m_CenterPoint.position;
             LastReleaseRotation = Quaternion.LookRotation(-PullAxis, transform.up);
             pullingHand = null;

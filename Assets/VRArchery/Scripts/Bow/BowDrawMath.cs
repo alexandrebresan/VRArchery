@@ -18,6 +18,7 @@ namespace VRArchery.Bow
         }
 
         /// <summary>The minimum is a dead zone, not a forced initial jump.</summary>
+        // Após a zona morta, a distância restante é normalizada até a extensão máxima.
         public static float Intensity(float distance, float minimum, float maximum)
         {
             if (!IsFinite(distance) || !IsFinite(minimum) || !IsFinite(maximum) || minimum < 0 || maximum <= minimum)

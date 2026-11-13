@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VRArchery.Bow;
+using VRArchery.Targets;
 
 namespace VRArchery.Arrows
 {
@@ -32,6 +33,9 @@ namespace VRArchery.Arrows
         Vector3 tipOffset;
         Vector3 previousTip;
         Vector3 flightDirection;
+        MovingTarget attachment;
+        Vector3 attachmentOffset;
+        Quaternion attachmentRotation;
 
         public ArrowState State { get; private set; }
         public Collider HitCollider { get; private set; }
@@ -94,6 +98,7 @@ namespace VRArchery.Arrows
             var displacement = tip - previousTip;
             if (displacement.sqrMagnitude > 0.000001f)
             {
+                // Varre a trajetória da ponta entre passos físicos para registrar contatos com superfícies finas.
                 var hits = Physics.SphereCastAll(previousTip, m_SweepRadius, displacement.normalized,
                     displacement.magnitude, m_ImpactMask, QueryTriggerInteraction.Ignore);
                 float closest = float.PositiveInfinity;
@@ -144,9 +149,25 @@ namespace VRArchery.Arrows
             body.position = point - rotation * Vector3.Scale(tipOffset, transform.lossyScale) + flightDirection * m_EmbedDepth;
             transform.SetPositionAndRotation(body.position, rotation);
             SetColliders(false);
-            // Stage 3 surfaces are static. Keep the world pose to avoid shear/deformation
-            // when the hit collider has non-uniform scale (target, floor or backstop).
+            if (target.TryGetComponent(out attachment))
+            {
+                var inverse = Quaternion.Inverse(attachment.transform.rotation);
+                attachmentOffset = inverse * (body.position - attachment.PhysicsPosition);
+                attachmentRotation = inverse * rotation;
+            }
             Impacted?.Invoke(new ArrowImpact(this, target, point, normal));
+        }
+
+        void LateUpdate()
+        {
+            if (attachment == null) return;
+            // Follow the rendered target pose without inheriting its scale or re-enabling collisions.
+            var frame = attachment.transform;
+            var position = frame.position + frame.rotation * attachmentOffset;
+            var rotation = frame.rotation * attachmentRotation;
+            body.position = position;
+            body.rotation = rotation;
+            transform.SetPositionAndRotation(position, rotation);
         }
 
         static Quaternion Facing(Vector3 direction) => Quaternion.LookRotation(direction,

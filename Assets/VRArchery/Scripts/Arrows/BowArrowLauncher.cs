@@ -29,6 +29,7 @@ namespace VRArchery.Arrows
         public float MinimumDrawDistance => m_MinimumDrawDistance;
         public float ReloadDelay => m_ReloadDelay;
         public Transform PlayerRoot { get => m_PlayerRoot; set => m_PlayerRoot = value; }
+        public bool LaunchBlocked { get; set; }
         public event Action<ArrowProjectile> ArrowLaunched;
 
         void OnEnable()
@@ -67,8 +68,9 @@ namespace VRArchery.Arrows
         {
             if (!armed) return;
             armed = false; // A draw can consume at most one arrow, even under duplicate/reentrant notifications.
-            if (NockedArrow == null || !m_Bow.IsHeld || m_Bow.LastDrawResult != BowDrawResult.Completed ||
+            if (LaunchBlocked || NockedArrow == null || !m_Bow.IsHeld || m_Bow.LastDrawResult != BowDrawResult.Completed ||
                 !ArrowLaunchMath.MeetsMinimum(m_Bow.LastReleaseDistance, m_MinimumDrawDistance)) return;
+            // A intensidade normalizada interpola a velocidade inicial dentro dos limites do arco.
             float speed = ArrowLaunchMath.Speed(intensity, m_MinimumSpeed, m_MaximumSpeed);
             if (speed <= 0) return;
             var arrow = NockedArrow;

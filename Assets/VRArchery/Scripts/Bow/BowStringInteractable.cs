@@ -12,6 +12,7 @@ namespace VRArchery.Bow
 
         public float InteractionRadius => m_InteractionRadius;
 
+        /// <summary>Autoriza a seleção da corda pela mão de puxada quando o arco está seguro e a mão está ao alcance.</summary>
         public override bool IsSelectableBy(IXRSelectInteractor interactor)
         {
             if (!base.IsSelectableBy(interactor) || m_Bow == null || !m_Bow.CanPull(interactor))
